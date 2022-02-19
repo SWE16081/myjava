@@ -1,0 +1,68 @@
+spring:  #yml严格控制空格
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/springbootlearn  #springbootlearn表示连接springbootlearn数据库
+#    driver-class-name: com.mysql.jdbc.Driver   #postgresql为org.postgresql.Driver 具体选项有哪些？
+    driver-class-name: com.mysql.cj.jdbc.Driver   #postgresql为org.postgresql.Driver 具体选项有哪些？
+#    type: com.alibaba.druid.pool.DruidDataSource #切换数据源--type默认使用tomcata
+#  jpa:
+#    show-sql: true  #控制台显示SQL
+#    hibernate: # 更新或者创建数据表
+#      ddl-auto: update
+#  flyway:
+#    enabled: true
+#    encoding: UTF-8
+#    baseline-on-migrate: true
+#    baseline-version: 1
+#    check-location: true
+  flyway:
+#    url: jdbc:mysql://127.0.0.1:3306/springbootlearn?useUnicode=true&characterEncoding=UTF-8
+#    user: root
+#    password: 123456
+    # 启用或禁用 flyway
+    enabled: true
+    # flyway 的 clean 命令会删除指定 schema 下的所有 table, 生产务必禁掉。这个默认值是 false 理论上作为默认配置是不科学的。
+    clean-disabled: false #是否要清除已有库下的表
+    # SQL 脚本的目录,多个路径使用逗号分隔 默认值 classpath:db/migration
+    locations: classpath:db/migration
+    #  metadata 版本控制信息表 默认 flyway_schema_history
+    table: flyway_schema_history
+    # 如果没有 flyway_schema_history 这个 metadata 表， 在执行 flyway migrate 命令之前, 必须先执行 flyway baseline 命令
+    # 设置为 true 后 flyway 将在需要 baseline 的时候, 自动执行一次 baseline。
+#    baseline-on-migrate: true
+    # 指定 baseline 的版本号,默认值为 1, 低于该版本号的 SQL 文件, migrate 时会被忽略
+    baseline-version: 1
+    # 字符编码 默认 UTF-8
+    encoding: UTF-8
+    # 是否允许不按顺序迁移 开发建议 true  生产建议 false
+    out-of-order: false
+    ignore-missing-migrations: true #忽略已删除的脚本文件
+    # 需要 flyway 管控的 schema list,这里我们配置为flyway  缺省的话, 使用spring.datasource.url 配置的那个 schema,
+    # 可以指定多个schema, 但仅会在第一个schema下建立 metadata 表, 也仅在第一个schema应用migration sql 脚本.
+    # 但flyway Clean 命令会依次在这些schema下都执行一遍. 所以 确保生产 spring.flyway.clean-disabled 为 true
+    schemas: flyway
+    # 执行迁移时是否自动调用验证   当你的 版本不符合逻辑 比如 你先执行了 DML 而没有 对应的DDL 会抛出异常
+    validate-on-migrate: true
+    sql-migration-prefix: V # 迁移sql脚本文件名称的前缀，默认V
+    sql-migration-separator: __ # 迁移sql脚本文件名称的分隔符，默认2个下划线__
+    sql-migration-suffixes: .sql # 迁移sql脚本文件名称的后缀
+
+server:
+  port: 9000
+  error:
+  include-binding-errors: always
+  tomcat:
+    uri-encoding: utf-8
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+#  config-location: classpath:mybatis/mybatis-config.xml #全局配置文件 classpath:没有空格
+#  type-aliases-package: club.herry.demo.springboottest.bean
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+#swagger:
+# enable: true
+
+

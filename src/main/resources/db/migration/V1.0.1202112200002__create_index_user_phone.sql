@@ -1,0 +1,1 @@
+CREATE INDEX user_phone USING BTREE ON users (phone);

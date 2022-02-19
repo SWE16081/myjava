@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <select id="getUser" resultType="com.example.demo.bean.User">
+        select * from users where id = #{id}
+    </select>
+
+    <select id="selUserRole" parameterType="map" resultMap="getUserRole">
+        select u.*,r.* from users as u
+        left join user_role ur on u.id=ur.user_id
+        left join role r on ur.role_id=r.id
+         where u.deleted=0
+    </select>
+    <resultMap type="com.example.demo.bean.UserRoleList2" id="getUserRole">
+        <!--property是实体类的属性名,column是数据库的字段名称-->
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="head_image" property="headImage"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+        <!--  一对一 -->
+<!--        <association property="role" javaType="com.example.demo.bean.Role">-->
+<!--            <id column="id" property="id"/>-->
+<!--            <result column="role_name" property="roleName"/>-->
+<!--            <result column="type" property="type"/>-->
+<!--        </association>-->
+        <!--  一对多 -->
+         <!-- JavaType是用来指定pojo中属性的类型，而ofType指定的是映射到list集合属性中pojo的类型-->
+        <collection property="role" ofType="com.example.demo.bean.Role">
+            <id column="id" property="id"/><!-- 此处必须用id-->
+            <id column="role_name" property="roleName"/>
+            <id column="type" property="type"/>
+        </collection>
+    </resultMap>
+</mapper>
